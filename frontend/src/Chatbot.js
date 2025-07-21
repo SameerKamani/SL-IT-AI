@@ -164,6 +164,28 @@ How can I assist you today?`
   const [ticketGenerated, setTicketGenerated] = useState(false);
   // Add state for the popup
   const [showTicketPopup, setShowTicketPopup] = useState(false);
+  // Add state for attachments
+  const [attachments, setAttachments] = useState([]);
+  // Add state for loading and error during ticket submission
+  const [submittingTicket, setSubmittingTicket] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  // Add state for preview modal
+  const [previewFile, setPreviewFile] = useState(null);
+  const [previewType, setPreviewType] = useState(null);
+  const fileInputRef = useRef();
+  // Add state for file error
+  const [fileError, setFileError] = useState("");
+
+  // Allowed file types/extensions
+  const allowedTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'image/svg+xml',
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    'application/vnd.ms-excel', // .xls
+  ];
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.pdf', '.docx', '.xlsx', '.xls'];
+  const maxFileSize = 10 * 1024 * 1024; // 10MB
 
   // Use custom MCP client instead of use-mcp
   const { state, tools, callTool, log, clearStorage } = useCustomMcp();
@@ -376,6 +398,61 @@ How can I assist you today?`
       'yes', 'yep', 'yeah', 'please do', 'sure', 'go ahead', 'ok', 'okay', 'confirm', 'create it', 'generate it', 'open it', 'file it', 'submit it', 'raise it', 'make it', 'do it', 'ticket yes', 'yes please', 'yes create', 'yes generate', 'yes open', 'yes file', 'yes submit', 'yes raise', 'yes make', 'yes do',
     ].some(phrase => lower.includes(phrase));
   }
+
+  // Handler for file input change (reset input after selection)
+  const handleAttachmentChange = (e) => {
+    setFileError("");
+    const files = Array.from(e.target.files);
+    setAttachments(prev => {
+      const existing = prev.map(f => f.name + f.size);
+      const newFiles = files.filter(f => !existing.includes(f.name + f.size));
+      const validFiles = [];
+      for (const file of newFiles) {
+        const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(ext)) {
+          setFileError(`File '${file.name}' is not a supported type.`);
+          continue;
+        }
+        if (file.size > maxFileSize) {
+          setFileError(`File '${file.name}' exceeds the 10MB size limit.`);
+          continue;
+        }
+        validFiles.push(file);
+      }
+      return [...prev, ...validFiles];
+    });
+    e.target.value = null; // reset input so same file can be re-added
+  };
+
+  // Handler to remove an attachment
+  const removeAttachment = (idx) => {
+    setAttachments(prev => prev.filter((_, i) => i !== idx));
+    if (fileInputRef.current) fileInputRef.current.value = null;
+  };
+
+  // Handler to preview file
+  const handlePreviewFile = (file, idx) => {
+    if (file.type.startsWith('image/')) {
+      // Revoke previous previewFile URL if any
+      if (previewFile) URL.revokeObjectURL(previewFile);
+      const url = URL.createObjectURL(file);
+      setPreviewFile(url);
+      setPreviewType('image');
+    } else if (file.type === 'application/pdf') {
+      const url = URL.createObjectURL(file);
+      window.open(url, '_blank'); // open PDF in new tab
+    } else {
+      const url = URL.createObjectURL(file);
+      window.open(url, '_blank');
+    }
+  };
+
+  // Handler to close image preview modal
+  const closePreviewModal = () => {
+    if (previewFile) URL.revokeObjectURL(previewFile);
+    setPreviewFile(null);
+    setPreviewType(null);
+  };
 
   // Helper to handle MCP tool calls
   const handleMcpToolCall = async (toolName, params) => {
@@ -728,6 +805,42 @@ How can I assist you today?`
     return 'Not Specified';
   };
 
+  // Function to submit ticket with attachments
+  const submitTicketWithAttachments = async () => {
+    if (!ticket) return;
+    setSubmittingTicket(true);
+    setSubmitError("");
+    try {
+      const formData = new FormData();
+      formData.append('ticket', JSON.stringify(ticket));
+      attachments.forEach((file) => {
+        formData.append('attachments', file);
+      });
+      // Replace with your backend endpoint for ticket+attachments
+      const response = await fetch('http://localhost:8000/api/ticket_with_attachments', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) throw new Error('Failed to submit ticket');
+      setShowTicketPopup(true);
+      setAttachments([]);
+      setTicket(null);
+      setTemplateFields([]);
+      setTicketGenerated(false);
+      setPendingTicketContext(null);
+      setMessages([
+        { 
+          sender: "bot", 
+          text: `Hi, welcome to the SL IT Chatbot!\n\nI can help you with:\n\n- Explaining SL policies\n- Providing troubleshooting tips for your IT issues\n- Creating support tickets for you\n\nHow can I assist you today?` }
+      ]);
+      setInput("");
+    } catch (err) {
+      setSubmitError('Error submitting ticket: ' + err.message);
+    } finally {
+      setSubmittingTicket(false);
+    }
+  };
+
   // Sidebar close on Esc
   useEffect(() => {
     if (!sidebarOpen) return;
@@ -963,26 +1076,122 @@ How can I assist you today?`
             ) : templatesError ? (
               <div style={{ color: 'red', fontStyle: 'italic' }}>{templatesError}</div>
             ) : ticket && Object.keys(ticket).length > 0 && templateFields && templateFields.length > 0 ? (
-              templateFields.map(field => {
-                const fieldName = field.name;
-                const value = getTicketValue(fieldName);
-                const required = isRequired(fieldName);
-                const fieldType = field.type;
-                const isAutofill = fieldType === 'autofill';
-                // Dependent dropdown logic for 'Item'
-                if (fieldType === 'dependent_dropdown') {
-                  const depField = field.dependency;
-                  const depValue = ticket[depField] || Object.keys(field.options)[0];
-                  const options = field.options[depValue] || ["Not Specified"];
+              <>
+                {templateFields.map(field => {
+                  const fieldName = field.name;
+                  const value = getTicketValue(fieldName);
+                  const required = isRequired(fieldName);
+                  const fieldType = field.type;
+                  const isAutofill = fieldType === 'autofill';
+                  // Dependent dropdown logic for 'Item'
+                  if (fieldType === 'dependent_dropdown') {
+                    const depField = field.dependency;
+                    const depValue = ticket[depField] || Object.keys(field.options)[0];
+                    const options = field.options[depValue] || ["Not Specified"];
+                    return (
+                      <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
+                        <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
+                          {cleanLabel(field.label || fieldName)}
+                          {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
+                        </label>
+                        <select
+                          id={fieldName}
+                          name={fieldName}
+                          value={value}
+                          disabled={isAutofill}
+                          style={{
+                            marginLeft: 8,
+                            padding: 6,
+                            borderRadius: 6,
+                            border: '1px solid #333',
+                            background: isAutofill ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)',
+                            color: 'inherit',
+                            width: '100%'
+                          }}
+                          onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
+                          required={required}
+                        >
+                          <option value="" disabled>Select...</option>
+                          {options.map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  }
+                  // Dropdown logic for normal dropdown fields
+                  if (fieldType === 'dropdown') {
+                    const options = field.options || ["Not Specified"];
+                    return (
+                      <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
+                        <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
+                          {cleanLabel(field.label || fieldName)}
+                          {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
+                        </label>
+                        <select
+                          id={fieldName}
+                          name={fieldName}
+                          value={value}
+                          disabled={isAutofill}
+                          style={{
+                            marginLeft: 8,
+                            padding: 6,
+                            borderRadius: 6,
+                            border: '1px solid #333',
+                            background: isAutofill ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)',
+                            color: 'inherit',
+                            width: '100%'
+                          }}
+                          onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
+                          required={required}
+                        >
+                          <option value="" disabled>Select...</option>
+                          {options.map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  }
+                  // Textarea for description
+                  if (fieldType === 'textarea') {
+                    return (
+                      <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
+                        <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
+                          {cleanLabel(field.label || fieldName)}
+                          {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
+                        </label>
+                        <textarea
+                          id={fieldName}
+                          name={fieldName}
+                          value={value}
+                          disabled={isAutofill}
+                          style={{
+                            marginLeft: 8,
+                            padding: 6,
+                            borderRadius: 6,
+                            border: '1px solid #333',
+                            background: isAutofill ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)',
+                            color: 'inherit',
+                            width: '100%'
+                          }}
+                          onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
+                          rows={3}
+                        />
+                      </div>
+                    );
+                  }
+                  // Default to text input
                   return (
                     <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
                       <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
                         {cleanLabel(field.label || fieldName)}
                         {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
                       </label>
-                      <select
+                      <input
                         id={fieldName}
                         name={fieldName}
+                        type="text"
                         value={value}
                         disabled={isAutofill}
                         style={{
@@ -996,105 +1205,83 @@ How can I assist you today?`
                         }}
                         onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
                         required={required}
-                      >
-                        <option value="" disabled>Select...</option>
-                        {options.map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                    </div>
-                  );
-                }
-                // Dropdown logic for normal dropdown fields
-                if (fieldType === 'dropdown') {
-                  const options = field.options || ["Not Specified"];
-                  return (
-                    <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
-                      <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
-                        {cleanLabel(field.label || fieldName)}
-                        {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
-                      </label>
-                      <select
-                        id={fieldName}
-                        name={fieldName}
-                        value={value}
-                        disabled={isAutofill}
-                        style={{
-                          marginLeft: 8,
-                          padding: 6,
-                          borderRadius: 6,
-                          border: '1px solid #333',
-                          background: isAutofill ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)',
-                          color: 'inherit',
-                          width: '100%'
-                        }}
-                        onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
-                        required={required}
-                      >
-                        <option value="" disabled>Select...</option>
-                        {options.map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                    </div>
-                  );
-                }
-                // Textarea for description
-                if (fieldType === 'textarea') {
-                  return (
-                    <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
-                      <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
-                        {cleanLabel(field.label || fieldName)}
-                        {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
-                      </label>
-                      <textarea
-                        id={fieldName}
-                        name={fieldName}
-                        value={value}
-                        disabled={isAutofill}
-                        style={{
-                          marginLeft: 8,
-                          padding: 6,
-                          borderRadius: 6,
-                          border: '1px solid #333',
-                          background: isAutofill ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)',
-                          color: 'inherit',
-                          width: '100%'
-                        }}
-                        onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
-                        rows={3}
                       />
                     </div>
                   );
-                }
-                // Default to text input
-                return (
-                  <div key={fieldName} className="ticket-field" style={{ marginBottom: 12 }}>
-                    <label htmlFor={fieldName} style={{ fontWeight: 500 }}>
-                      {cleanLabel(field.label || fieldName)}
-                      {required && <span style={{ color: 'red', marginLeft: 4 }}>*</span>}
-                    </label>
-                    <input
-                      id={fieldName}
-                      name={fieldName}
-                      type="text"
-                      value={value}
-                      disabled={isAutofill}
-                      style={{
-                        marginLeft: 8,
-                        padding: 6,
-                        borderRadius: 6,
-                        border: '1px solid #333',
-                        background: isAutofill ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)',
-                        color: 'inherit',
-                        width: '100%'
-                      }}
-                      onChange={!isAutofill ? e => setTicket(prev => ({ ...prev, [fieldName]: e.target.value })) : undefined}
-                      required={required}
-                    />
-                  </div>
-                );
-              })
+                })}
+                {/* Always render attachment UI after all fields */}
+                <div className="ticket-field" style={{ marginTop: 0, marginBottom: 12 }}>
+                  <label style={{ fontWeight: 500, display: 'block', marginBottom: 6 }}>
+                    Attachments:
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.pdf,.docx,.xlsx,.xls,image/*,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                    onChange={handleAttachmentChange}
+                    className="file-upload"
+                    style={{ display: 'none' }}
+                    ref={fileInputRef}
+                    id="custom-attachment-input"
+                  />
+                  <button
+                    type="button"
+                    style={{
+                      padding: '6px 16px',
+                      borderRadius: 6,
+                      border: '1px solid #333',
+                      background: '#23272f',
+                      color: '#fff',
+                      fontWeight: 500,
+                      fontSize: 14,
+                      cursor: 'pointer',
+                      marginBottom: 8,
+                      marginRight: 8
+                    }}
+                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  >
+                    Choose Files
+                  </button>
+                  {attachments.length === 0 && <span style={{ color: '#aaa', fontSize: 13 }}>No files selected</span>}
+                  {attachments.length > 0 && (
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {attachments.map((file, idx) => (
+                        <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 2, background: 'rgba(0,0,0,0.08)', borderRadius: 6, padding: '4px 8px', maxWidth: 260 }}>
+                          {/* Preview thumbnail or icon */}
+                          {file.type.startsWith('image/') ? (
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={file.name}
+                              style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4, marginRight: 8, cursor: 'pointer', border: '1px solid #333' }}
+                              onClick={() => handlePreviewFile(file, idx)}
+                            />
+                          ) : file.type === 'application/pdf' ? (
+                            <span
+                              style={{ fontSize: 24, marginRight: 8, cursor: 'pointer' }}
+                              title="Preview PDF"
+                              onClick={() => handlePreviewFile(file)}
+                            >📄</span>
+                          ) : (
+                            <span style={{ width: 32, height: 32, marginRight: 8, display: 'inline-block', textAlign: 'center', lineHeight: '32px', background: '#eee', borderRadius: 4, fontSize: 18, cursor: 'pointer' }} onClick={() => handlePreviewFile(file)}>
+                              📎
+                            </span>
+                          )}
+                          {/* File name (clickable for preview) */}
+                          <span
+                            style={{ flex: 1, marginRight: 8, cursor: 'pointer', textDecoration: 'underline', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 120 }}
+                            title={file.name}
+                            onClick={() => handlePreviewFile(file, idx)}
+                          >
+                            {file.name}
+                          </span>
+                          <button type="button" onClick={() => removeAttachment(idx)} style={{ color: '#e53e3e', background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, marginLeft: 4 }}>Remove</button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {fileError && <div style={{ color: '#e53e3e', fontSize: 13, marginTop: 4 }}>{fileError}</div>}
+                </div>
+              </>
             ) : (
               <div style={{ color: '#aaa', fontStyle: 'italic' }}>No ticket data yet.</div>
             )}
@@ -1126,7 +1313,9 @@ How can I assist you today?`
             {ticketGenerated && !awaitingConfirmation ? (
               <div style={{ height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(35,42,54,0.92)', borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
                 <div className="ticket-action-buttons" style={{ display: 'flex', gap: '1rem' }}>
-                  <button className="ticket-action-btn" onClick={handleConfirmTicket}>Confirm Ticket</button>
+                  <button className="ticket-action-btn" onClick={submitTicketWithAttachments} disabled={submittingTicket}>
+                    {submittingTicket ? 'Submitting...' : 'Confirm Ticket'}
+                  </button>
                   <button className="ticket-action-btn" onClick={handleStartNewChat}>Start New Chat</button>
                 </div>
               </div>
@@ -1249,6 +1438,14 @@ How can I assist you today?`
               ]);
               setInput("");
             }}>OK</button>
+          </div>
+        </div>
+      )}
+      {previewFile && previewType === 'image' && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(24,24,24,0.7)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={closePreviewModal}>
+          <div style={{ position: 'relative', background: 'rgba(30,32,36,0.98)', borderRadius: 12, boxShadow: '0 4px 24px #0008', padding: 16 }} onClick={e => e.stopPropagation()}>
+            <img src={previewFile} alt="Preview" style={{ maxWidth: '80vw', maxHeight: '80vh', borderRadius: 8 }} />
+            <button style={{ position: 'absolute', top: 8, right: 8, fontSize: 28, background: 'none', border: 'none', color: '#fff', cursor: 'pointer', zIndex: 2001 }} onClick={closePreviewModal}>&times;</button>
           </div>
         </div>
       )}

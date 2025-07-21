@@ -27,6 +27,7 @@ from models import RAGRequest, RAGResponse
 from langgraph_workflow import compiled_graph
 from agents import extract_user_info_from_history
 from policy_rag import PolicyRAGAgent
+from api_routes import router as api_router
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +41,10 @@ from config import get_rag_agent
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Add api_routes router
+app.include_router(api_router)
+print("[DEBUG] api_routes router included in FastAPI app")
 
 # Add timeout configuration
 import asyncio

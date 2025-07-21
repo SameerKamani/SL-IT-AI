@@ -4,7 +4,7 @@ SL-IT-AI FastAPI Routes
 """
 import json
 from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File, Form, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -17,6 +17,10 @@ from agents import (
 )
 from agents import classify_issue_type_llm, fill_ticket_with_llm_and_fuzzy
 from langgraph_workflow import compiled_graph
+import os
+import shutil
+
+router = APIRouter()
 
 # --- API ROUTES ---
 async def chat_endpoint(request: ChatRequest) -> ChatResponse:
@@ -150,6 +154,27 @@ async def clear_session_endpoint(session_id: str) -> Dict[str, str]:
     except Exception as e:
         logger.error(f"Error clearing session: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/api/ticket_with_attachments")
+async def ticket_with_attachments(ticket: str = Form(...), attachments: list[UploadFile] = File(None)):
+    print("[DEBUG] ticket_with_attachments endpoint called")
+    # Parse ticket JSON
+    try:
+        ticket_data = json.loads(ticket)
+    except Exception as e:
+        return {"success": False, "error": f"Invalid ticket JSON: {e}"}
+    # Save files (example: save to ./uploads)
+    upload_dir = os.path.join(os.path.dirname(__file__), "..", "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
+    saved_files = []
+    if attachments:
+        for file in attachments:
+            file_path = os.path.join(upload_dir, file.filename)
+            with open(file_path, "wb") as f:
+                shutil.copyfileobj(file.file, f)
+            saved_files.append(file.filename)
+    # You can now process ticket_data and saved_files as needed
+    return {"success": True, "files": saved_files}
 
 # --- CORS MIDDLEWARE ---
 def add_cors_middleware(app: FastAPI):
