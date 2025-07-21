@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "helpdesk-server": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["mcp_tools.py"],
+      "resources": [
+        "employees",
+        "templates",
+        "ticket-search"
+      ]
+    }
+  }
+} 

@@ -1,0 +1,325 @@
+# IT Helpdesk Issues
+Category: IT Helpdesk Issues
+Subcategories and Items:
+- Printer
+  - Cartridge Empty
+  - Paper Jam Issue
+  - Printer Not Working
+- Software Troubleshooting
+  - Android Studio
+  - Browser
+  - Docker Service
+  - Dot Net Framework
+  - Host File
+  - Others (Specify Software)
+- VOIP
+  - IP Phone Not Working
+- VPN
+  - Forticlient Login Issues
+  - Fortitoken Reissuance
+  - Others
+  - Pulse Secure Not Working
+- Web Access
+  - Certificate Error
+  - Website Stop Working
+- Workstation
+  - Battery
+  - Charger Issue
+  - Display Issue
+  - Headphones Issue
+  - Keyboard Issue
+  - LAN Issue
+
+# Electric Issues
+Category: SL - Electric
+Subcategories and Items:
+- Passive networking issues
+  - Access Ports issues, enabling and disabling requirement
+  - Cable tracing/Mapping and harnessing
+  - Face plates / board sheets damaged
+  - Faulty RJ45 or I/O
+  - IP Configuration physical check and IP ping network verification
+  - LAN/Network CAT-6/CAT-6A cable required
+  - Network cable testing on complaints
+  - Network is not working
+  - Patch Cord/Switch side network cable issue
+  - Ports provisioning, testing, and VLAN assigning on IPs
+  - Projector/LCD issues & VGA cable connection
+  - RFID system networking troubleshooting and maintenance
+  - Servers, racks, switches mounting and PDU installation
+  - Switch side rack to user desk
+  - VOIP phone installation and network issues
+- Power Issues
+  - Cable damage or points loosening/sparking
+  - Down time requirement (Power and network)
+  - Multiconverter or power board requirement (Extensions)
+  - Overload and short circuit failure
+  - Power board requirement
+  - Power issue (no power supply, damage, short circuit, UPS supply issue)
+  - Power plug and sockets faulty, burned/damaged
+  - Safety internal breaker of panels & UPS tripped
+  - Voltage power supply fluctuations
+- Services
+  - Insect killer service and maintenance
+  - Lift room/Data center and power room maintenance
+  - Periodic Generator service and maintenance
+  - UPS and stabilizers service
+
+## Category: Printer
+### Item: Cartridge Empty
+- Problem: "The printer is not printing and shows a 'cartridge empty' warning."
+- Context: This occurs when the ink or toner cartridge in the printer has run out of ink/toner or is not recognized by the printer.
+- Solution: Replace the empty cartridge with a new one compatible with your printer model. If the issue persists after replacement, try reseating the cartridge or contact IT support.
+
+### Item: Paper Jam Issue
+- Problem: "The printer is showing a paper jam error or paper is stuck inside."
+- Context: Paper jams are common and can be caused by misaligned paper, debris, or worn rollers.
+- Solution: Open the printer's access panels and gently remove any jammed paper. Ensure paper is loaded correctly. If jams continue, contact IT for maintenance.
+
+### Item: Printer Not Working
+- Problem: "The printer is not responding or not printing at all."
+- Context: This can be due to connectivity issues, driver problems, or hardware faults.
+- Solution: Check printer connections and power. Restart the printer and your computer. Reinstall printer drivers if needed. If unresolved, contact IT.
+
+## Category: Software Troubleshooting
+### Item: Android Studio
+- Problem: "Android Studio is crashing or not opening."
+- Context: This may be due to corrupted installation, incompatible plugins, or insufficient system resources.
+- Solution: Restart your computer. Update or reinstall Android Studio. Disable unnecessary plugins. If the problem persists, contact IT.
+
+### Item: Browser
+- Problem: "Web browser is slow, crashing, or not opening websites."
+- Context: Issues may be caused by corrupted cache, extensions, or network problems.
+- Solution: Clear browser cache and cookies. Disable extensions. Try a different browser. Check your network connection. Contact IT if unresolved.
+
+### Item: Docker Service
+- Problem: "Docker is not starting or containers are failing."
+- Context: This can be due to configuration errors, resource limits, or outdated Docker versions.
+- Solution: Restart Docker service. Check Docker logs for errors. Update Docker. Contact IT for advanced troubleshooting.
+
+### Item: Dot Net Framework
+- Problem: ".NET applications are not running or showing errors."
+- Context: This may be due to missing or corrupted .NET Framework installations.
+- Solution: Reinstall or repair the .NET Framework. Ensure Windows is updated. Contact IT if issues persist.
+
+### Item: Host File
+- Problem: "Unable to access certain websites or services."
+- Context: The system's host file may have incorrect or malicious entries.
+- Solution: Check and edit the host file to remove unwanted entries. Restore the default host file if unsure. Contact IT for help.
+
+### Item: Others (Specify Software)
+- Problem: "A specific software is not working as expected."
+- Context: Issues can vary by software and may include crashes, errors, or missing features.
+- Solution: Restart the software and your computer. Check for updates. Contact IT with details about the software and error.
+
+## Category: VOIP
+### Item: IP Phone Not Working
+- Problem: "The IP phone has no dial tone or cannot make/receive calls."
+- Context: This can be due to network issues, power problems, or misconfiguration.
+- Solution: Check network and power connections. Restart the phone. If the issue persists, contact IT.
+
+## Category: VPN
+### Item: Forticlient Login Issues
+- Problem: "Cannot log in to VPN using Forticlient."
+- Context: Login issues may be due to incorrect credentials, expired passwords, or network restrictions.
+- Solution: Verify credentials. Reset password if needed. Try connecting from a different network. Contact IT if unresolved.
+
+### Item: Fortitoken Reissuance
+- Problem: "Fortitoken is not working or needs to be reissued."
+- Context: Token issues can occur if the token is lost, expired, or not synced.
+- Solution: Request a new token from IT. Follow instructions to activate the new token.
+
+### Item: Others
+- Problem: "Other VPN-related issues."
+- Context: May include connection drops, slow speeds, or configuration errors.
+- Solution: Restart VPN client. Check network. Contact IT for advanced troubleshooting.
+
+### Item: Pulse Secure Not Working
+- Problem: "Pulse Secure VPN client is not connecting."
+- Context: This may be due to software conflicts, outdated client, or network issues.
+- Solution: Update Pulse Secure. Restart your computer. Contact IT if the problem continues.
+
+## Category: Web Access
+### Item: Certificate Error
+- Problem: "Browser shows a certificate error when accessing a website."
+- Context: This can be due to expired, invalid, or untrusted SSL certificates.
+- Solution: Check the website URL. If it's a company site, contact IT. For external sites, proceed only if you trust the source.
+
+### Item: Website Stop Working
+- Problem: "A website is not loading or is down."
+- Context: The site may be experiencing downtime or there may be network issues.
+- Solution: Try accessing the site from another device or network. If it's a company site, report to IT.
+
+## Category: Workstation
+### Item: Battery
+- Problem: "Laptop battery is not charging or drains quickly."
+- Context: This can be due to battery age, faulty charger, or power settings.
+- Solution: Try a different charger. Adjust power settings. If the battery is old, request a replacement from IT.
+
+### Item: Charger Issue
+- Problem: "Laptop is not charging or charger is not working."
+- Context: Could be a faulty charger, damaged port, or battery issue.
+- Solution: Try another charger. Inspect the charging port. Contact IT for repair or replacement.
+
+### Item: Display Issue
+- Problem: "Screen is flickering, blank, or has lines."
+- Context: May be caused by loose cables, driver issues, or hardware faults.
+- Solution: Restart the computer. Check display connections. Update drivers. Contact IT if unresolved.
+
+### Item: Headphones Issue
+- Problem: "No sound or headphones not detected."
+- Context: Could be due to loose connection, driver issues, or hardware failure.
+- Solution: Check connection. Try headphones on another device. Update audio drivers. Contact IT if needed.
+
+### Item: Keyboard Issue
+- Problem: "Keyboard keys are not working or typing incorrectly."
+- Context: May be due to debris, driver issues, or hardware faults.
+- Solution: Clean the keyboard. Restart the computer. Update drivers. Contact IT for replacement if needed.
+
+### Item: LAN Issue
+- Problem: "No network connection via LAN cable."
+- Context: Could be a faulty cable, port, or network configuration.
+- Solution: Try a different cable or port. Restart the computer. Contact IT if the issue persists.
+
+## Category: Passive networking issues
+### Item: Access Ports issues, enabling and disabling requirement
+- Problem: "Cannot access network ports or need ports enabled/disabled."
+- Context: Network ports may be disabled for security or configuration reasons.
+- Solution: Contact IT to enable or disable the required ports.
+
+### Item: Cable tracing/Mapping and harnessing
+- Problem: "Need to trace or map network cables."
+- Context: Cable tracing is required for troubleshooting or network changes.
+- Solution: Contact IT for cable tracing and mapping services.
+
+### Item: Face plates / board sheets damaged
+- Problem: "Face plates or board sheets are damaged."
+- Context: Damaged face plates can expose wiring and pose safety risks.
+- Solution: Report to IT for replacement or repair.
+
+### Item: Faulty RJ45 or I/O
+- Problem: "Network port (RJ45) is not working."
+- Context: Could be due to physical damage or wiring issues.
+- Solution: Try another port. Report to IT for repair.
+
+### Item: IP Configuration physical check and IP ping network verification
+- Problem: "Need to verify IP configuration or network connectivity."
+- Context: Used for troubleshooting network issues.
+- Solution: Contact IT to perform IP configuration checks and network tests.
+
+### Item: LAN/Network CAT-6/CAT-6A cable required
+- Problem: "Need a new or replacement CAT-6/CAT-6A network cable."
+- Context: Required for high-speed network connections.
+- Solution: Request a cable from IT.
+
+### Item: Network cable testing on complaints
+- Problem: "Suspect a faulty network cable."
+- Context: Faulty cables can cause intermittent or no connectivity.
+- Solution: Contact IT to test and replace the cable if needed.
+
+### Item: Network is not working
+- Problem: "No network connectivity."
+- Context: Could be due to cable, switch, or configuration issues.
+- Solution: Check cable and port. Restart device. Contact IT if unresolved.
+
+### Item: Patch Cord/Switch side network cable issue
+- Problem: "Patch cord or switch side cable is faulty."
+- Context: Faulty patch cords can disrupt network connectivity.
+- Solution: Contact IT to test and replace the patch cord.
+
+### Item: Ports provisioning, testing, and VLAN assigning on IPs
+- Problem: "Need port provisioning, testing, or VLAN assignment."
+- Context: Required for network segmentation and access control.
+- Solution: Contact IT for provisioning and VLAN configuration.
+
+### Item: Projector/LCD issues & VGA cable connection
+- Problem: "Projector or LCD display is not working."
+- Context: Could be due to cable, port, or device issues.
+- Solution: Check connections. Try another cable. Contact IT for troubleshooting.shake the projector up a little and then use the remote and press the red button to reboot it 
+
+### Item: RFID system networking troubleshooting and maintenance
+- Problem: "RFID system is not connecting to the network."
+- Context: May be due to network or device configuration issues.
+- Solution: Contact IT for RFID network troubleshooting.
+
+### Item: Servers, racks, switches mounting and PDU installation
+- Problem: "Need help with mounting servers, racks, switches, or PDU installation."
+- Context: Physical installation and setup of network equipment.
+- Solution: Contact IT for installation services.
+
+### Item: Switch side rack to user desk
+- Problem: "Need network connection from rack to user desk."
+- Context: Required for new setups or relocations.
+- Solution: Contact IT to set up the connection.
+
+### Item: VOIP phone installation and network issues
+- Problem: "VOIP phone is not working or needs installation."
+- Context: Could be due to network or configuration issues.
+- Solution: Contact IT for VOIP phone setup and troubleshooting.
+
+## Category: Power Issues
+### Item: Cable damage or points loosening/sparking
+- Problem: "Power cable is damaged or sparking."
+- Context: Damaged cables are a safety hazard and can cause power loss.
+- Solution: Stop using the cable. Report to IT for immediate replacement.
+
+### Item: Down time requirement (Power and network)
+- Problem: "Need scheduled downtime for power or network maintenance."
+- Context: Downtime is required for safe maintenance or upgrades.
+- Solution: Coordinate with IT to schedule downtime.
+
+### Item: Multiconverter or power board requirement (Extensions)
+- Problem: "Need a multiconverter or power extension board."
+- Context: Required for connecting multiple devices.
+- Solution: Request from IT or facilities.
+
+### Item: Overload and short circuit failure
+- Problem: "Power overload or short circuit has occurred."
+- Context: Can cause power loss and equipment damage.
+- Solution: Disconnect affected devices. Report to IT for inspection.
+
+### Item: Power board requirement
+- Problem: "Need a new power board."
+- Context: Required for additional power outlets.
+- Solution: Request from IT or facilities.
+
+### Item: Power issue (no power supply, damage, short circuit, UPS supply issue)
+- Problem: "No power supply or UPS is not working."
+- Context: Could be due to power outage, equipment failure, or UPS issues.
+- Solution: Check power connections. Contact IT for troubleshooting.
+
+### Item: Power plug and sockets faulty, burned/damaged
+- Problem: "Power socket is burned or not working."
+- Context: Damaged sockets are a safety hazard.
+- Solution: Do not use the socket. Report to IT for repair.
+
+### Item: Safety internal breaker of panels & UPS tripped
+- Problem: "Breaker or UPS has tripped."
+- Context: Tripped breakers can cut power to equipment.
+- Solution: Contact IT or facilities to reset and inspect.
+
+### Item: Voltage power supply fluctuations
+- Problem: "Power supply is fluctuating."
+- Context: Fluctuations can damage sensitive equipment.
+- Solution: Report to IT. Use surge protectors if available.
+
+## Category: Services
+### Item: Insect killer service and maintenance
+- Problem: "Insect killer device needs service or maintenance."
+- Context: Regular maintenance ensures device effectiveness.
+- Solution: Contact facilities or IT for service.
+
+### Item: Lift room/Data center and power room maintenance
+- Problem: "Lift room or data center needs maintenance."
+- Context: Regular maintenance is required for safety and uptime.
+- Solution: Contact facilities or IT to schedule maintenance.
+
+### Item: Periodic Generator service and maintenance
+- Problem: "Generator needs periodic service."
+- Context: Regular servicing ensures reliable backup power.
+- Solution: Contact facilities or IT for generator maintenance.
+
+### Item: UPS and stabilizers service
+- Problem: "UPS or stabilizer needs service."
+- Context: Regular maintenance ensures power protection.
+- Solution: Contact IT for UPS/stabilizer service. 
