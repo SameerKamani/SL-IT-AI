@@ -245,3 +245,4 @@ xxhash==3.5.0
 yarl==1.20.0
 zipp==3.23.0
 zstandard==0.23.0
+faiss-cpu

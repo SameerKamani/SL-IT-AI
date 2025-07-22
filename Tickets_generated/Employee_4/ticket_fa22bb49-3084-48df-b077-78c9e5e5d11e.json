@@ -1,0 +1,20 @@
+{
+  "Requester(Required)": "Employee_4",
+  "Request Type": "Incident",
+  "Status": "Open",
+  "Mode": "Web Form",
+  "Service Category(Required)": "Systems LTD IT Support",
+  "Group": "SL Support Group",
+  "Priority": "Not Specified",
+  "Technician": "Not Specified",
+  "Category(Required)": "IT Helpdesk Issues",
+  "Subcategory(Required)": "Workstation",
+  "Item(Required)": "LAN Issue",
+  "SL Competency(Required)": "VSI H - AI",
+  "Floor Information(Required)": "2",
+  "Machine Name(Required)": "Not Specified",
+  "Subject(Required)": "WiFi not working",
+  "Description": "The user is experiencing WiFi connectivity issues, where their wireless internet connection is not functioning.",
+  "Agent_Type": "IT Helpdesk Agent",
+  "Processing_Notes": "Ticket created by IT Helpdesk Agent via A2A"
+}
