@@ -1,7 +1,7 @@
-SYSTEMS LIMITED POLICIES DOCUMENT
+Company POLICIES DOCUMENT
 
 1. VISION STATEMENT
-Systems Limited as an Institution is committed to being the Leader of IT & ITES in the Region through
+Company as an Institution is committed to being the Leader of IT & ITES in the Region through
 our Thought Leadership, Sustained Service Delivery Excellence, Strong Customer Focused Employees,
 Strong relationship with our Customers, Partners, and Vendors. To that end we must continuously
 innovate, enhance our service offerings, achieve superior financial results and increase value to our clients
@@ -9,7 +9,7 @@ and trusted shareholders. These unwavering expectations provide the foundation o
 those whom we interact
 
 2. MISSION STATEMENT
-Systems Limited is dedicated to provide the Highest Quality Business Solutions, IT & IT Enabled Services
+Company is dedicated to provide the Highest Quality Business Solutions, IT & IT Enabled Services
 and People to our clients and business partners that earns their respect and loyalty, we aim to be the
 number one service provider through our battle tested methodologies, processes, frameworks and
 customer focused resources in the niche Industry and Technology/Business Sector we operate.
@@ -18,7 +18,7 @@ Policies should be read out in the session with actual Policy documents, in orde
 management directions and context of Organization
 
 3. ITSM POLICY STATEMENT:
-It is the policy of Systems Limited to implement an IT Service Management framework within the
+It is the policy of Company to implement an IT Service Management framework within the
 scope of its geographically distributed BPO & IT departments providing information processing
 services to various sectors.
 1. The provision of services shall be aligned to customer and user needs.
@@ -52,7 +52,7 @@ Ref Doc: Policy Definition IT Service Management_2019
 4. INFORMATION SECURITY POLICY STATEMENT:
 The purpose of the information security policy is to provide direction and support for all information
 security activities in accordance with business requirements and relevant laws and regulations.
-Systems Limited aims that:
+Company aims that:
 1. A management structure shall be established to initiate and control the implementation of
 information security, data privacy and protection from malware and intrusion.
 2. Annually or need basis management review shall conduct for improvement and based on
@@ -66,9 +66,9 @@ information security policies and procedures shall be monitored during an indivi
 employment.
 6. All staff shall be trained in security procedures and the correct use of information systems
 facilities. Shall be given security awareness session at the time of joining and each employee
-/ 3rd party have to sign NDA to ensure privacy, integrity and confidentiality of SL and Clients
+/ 3rd party have to sign NDA to ensure privacy, integrity and confidentiality of Company and Clients
 data and information.
-7. All SL employees 3rd parties are trained and advised to ensure the integrity and
+7. All Company employees 3rd parties are trained and advised to ensure the integrity and
 confidentiality of client data.
 8. Incidents affecting security shall be reported promptly through the defined management
 structure.
@@ -109,14 +109,14 @@ management.
 24. Information systems shall be audited for compliance.
 25. Effectiveness of implemented security controls shall be measured and shared with the
 interested parties.
-26. SL user can only authorised send and receive email within the organization. In case user
+26. Company user can only authorised send and receive email within the organization. In case user
 required to send mails to external domain, he has to create a ticket with business justification
 and after approval access can be granted.
 Ref Doc: Policy Definition Information Security_v2.2 / 2020
 
 5. QUALITY MANAGEMENT POLICY STATEMENT:
 Our Top management has created following quality policy
-1. At Systems Limited our goals are to meet or exceed our customers’ needs through timely
+1. At Company our goals are to meet or exceed our customers’ needs through timely
 delivery of high quality software and services and to increase productivity and profitability.
 2. To achieve these goals we have adopted Quality Management approaches that include
 well-defined management and software development processes and mechanisms for
@@ -130,4 +130,4 @@ Any employee found to have violated this policy may be subject to disciplinary a
 including termination of employment.
 
 6. HATER POLICY
-1. When you see someone at Systems Limited having a burger, you are obliged to toss a watermelon at them.
+1. When you see someone at Company having a burger, you are obliged to toss a watermelon at them.
